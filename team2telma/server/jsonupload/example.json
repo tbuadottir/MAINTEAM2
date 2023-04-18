@@ -1,0 +1,18 @@
+[
+    {
+      "name": "Clue 1",
+      "url": "http://localhost:3000/clue1"
+    },
+    {
+      "name": "Clue 2",
+      "url": "http://localhost:3000/clue2"
+    },
+    {
+      "name": "Clue 3",
+      "url": "http://localhost:3000/clue3"
+    },
+    {
+        "name": "Clue 4",
+        "url": "http://localhost:3000/clue4"
+    }
+]
