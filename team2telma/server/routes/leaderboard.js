@@ -8,25 +8,34 @@ router.get('/', async (req, res) => {
       {
         $group: {
           _id: '$teamName',
-          totalClues: { $sum: 1 },
-          lastTimeStamp: { $max: '$timeStamp' },
+          clues: { $addToSet: '$clueNumber' },
+          lastTimeStamp: { $max: { $toDate: "$timeStamp" } },
         },
       },
       {
         $project: {
           _id: 0,
           teamName: '$_id',
-          totalClues: 1,
-          latestTimestamp: { $toDate: { $toString: "$lastTimeStamp" } },
+          totalClues: { $size: '$clues' },
+          latestTimestamp: "$lastTimeStamp",
         },
       },
-      { $sort: { totalClues: -1, lastTimeStamp: 1 } },
     ]);
 
-    res.json(leaderboardData);
+    const sortedLeaderboardData = leaderboardData.sort((a, b) => {
+      if (a.totalClues === b.totalClues) {
+        return a.latestTimestamp.getTime() - b.latestTimestamp.getTime();
+      } else {
+        return b.totalClues - a.totalClues;
+      }
+    });
+    console.log('Sorted Leaderboard Data:', sortedLeaderboardData);
+    res.json(sortedLeaderboardData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+
 });
+
 
 module.exports = router;
